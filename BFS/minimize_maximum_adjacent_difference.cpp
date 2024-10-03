@@ -19,7 +19,7 @@ bool can_reach(vector<vector<int>>& graph, int mid)
     int m = graph.size();
     int n = graph[0].size();
 
-    vector<vector<bool>> visited(m,vector<bool>(m, false));
+    vector<vector<bool>> visited(m,vector<bool>(n, false));
     queue<pair<int,int>> q;
 
     q.push({0,0});
