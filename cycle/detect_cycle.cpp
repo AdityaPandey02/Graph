@@ -1,50 +1,44 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include<iostream>
+#include<vector>
 
 using namespace std;
 
-bool detectCycleBFS(vector<vector<int>>& adj, int v, vector<int>& visited) {
-    queue<int> q;
-    q.push(v);
-    visited[v] = 1;
+bool detectCycle(vector<vector<int>>& adj, int x, vector<bool> &visited, vector<bool>& recstack)
+{
+    visited[x]=true;
+    recstack[x]=true;
 
-    while (!q.empty()) {
-        int curr = q.front();
-        q.pop();
+    for(auto y: adj[x])
+    {
+        if(!visited[y] && detectCycle(adj,y,visited,recstack))
+            return true;
+        else if (recstack[y])
+            return true;
+        
+    }
 
-        for (int x : adj[curr]) {
-            if (visited[x] == 1) {
-                return true;
-            }
-            if (visited[x] == 0) {
+    recstack[x]=false;
+    return false;
+}
 
-                visited[x] = 1;
-                q.push(x);
-            }
-        }
-        visited[curr] = 2;
+bool isCyclic(vector<vector<int>>& adj, int V)
+{
+    vector<bool> visited(V,false);
+    vector<bool> recstack(V,false);
+
+    for(int i=0;i<V;i++)
+    {
+        if(!visited[i] && detectCycle(adj,i,visited,recstack))
+            return true;
     }
     return false;
 }
 
-bool hasCycle(vector<vector<int>>& adj) {
-    vector<int> visited(adj.size(), 0);
+int main()
+{
+    int V=4;
 
-    for (int i = 0; i < adj.size(); i++) {
-        if (visited[i] == 0) {
-            if (detectCycleBFS(adj, i, visited)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-int main() {
-    int V = 4;
     vector<vector<int>> adj(V);
-
     adj[0].push_back(1);
     adj[0].push_back(2);
     adj[1].push_back(2);
@@ -52,10 +46,9 @@ int main() {
     adj[2].push_back(3);
     adj[3].push_back(3);
 
-    if (hasCycle(adj))
-        cout << "Contains Cycle" << endl;
+    if(isCyclic(adj,V))
+        cout<<"Cycle present";
     else
-        cout << "No Cycle" << endl;
-
+        cout<<"Cycle not present";
     return 0;
 }
