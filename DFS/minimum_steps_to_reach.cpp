@@ -3,7 +3,7 @@ using namespace std;
 
 int steps(int source, int step, int dest)
 {
-	if (abs(source) > (dest)) 
+	if (abs(source) > abs(dest)) 
 		return INT_MAX;
 	if (source == dest) return step;
 
